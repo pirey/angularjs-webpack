@@ -1,27 +1,28 @@
-'use strict';
+'use strict'
 
 // Modules
-var webpack = require('webpack');
-var autoprefixer = require('autoprefixer');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack')
+const autoprefixer = require('autoprefixer')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const path = require('path')
 
 /**
  * Env
  * Get npm lifecycle event to identify the environment
  */
-var ENV = process.env.npm_lifecycle_event;
-var isTest = ENV === 'test' || ENV === 'test-watch';
-var isProd = ENV === 'build';
+const ENV = process.env.npm_lifecycle_event
+const isTest = ENV === 'test' || ENV === 'test-watch'
+const isProd = ENV === 'build'
 
-module.exports = function makeWebpackConfig() {
+module.exports = (function makeWebpackConfig () {
   /**
    * Config
    * Reference: http://webpack.github.io/docs/configuration.html
    * This is the object where all configuration gets set
    */
-  var config = {};
+  const config = {}
 
   /**
    * Entry
@@ -31,7 +32,7 @@ module.exports = function makeWebpackConfig() {
    */
   config.entry = isTest ? void 0 : {
     app: './src/app/app.js'
-  };
+  }
 
   /**
    * Output
@@ -41,7 +42,7 @@ module.exports = function makeWebpackConfig() {
    */
   config.output = isTest ? {} : {
     // Absolute output directory
-    path: __dirname + '/dist',
+    path: path.resolve(__dirname, 'dist'),
 
     // Output path from the view of the page
     // Uses webpack-dev-server in development
@@ -54,7 +55,7 @@ module.exports = function makeWebpackConfig() {
     // Filename for non-entry points
     // Only adds hash in build mode
     chunkFilename: isProd ? '[name].[hash].js' : '[name].bundle.js'
-  };
+  }
 
   /**
    * Devtool
@@ -62,13 +63,11 @@ module.exports = function makeWebpackConfig() {
    * Type of sourcemap to use per build type
    */
   if (isTest) {
-    config.devtool = 'inline-source-map';
-  }
-  else if (isProd) {
-    config.devtool = 'source-map';
-  }
-  else {
-    config.devtool = 'eval-source-map';
+    config.devtool = 'inline-source-map'
+  } else if (isProd) {
+    config.devtool = 'source-map'
+  } else {
+    config.devtool = 'eval-source-map'
   }
 
   /**
@@ -107,7 +106,7 @@ module.exports = function makeWebpackConfig() {
         loader: [
           {loader: 'css-loader', query: {sourceMap: true}},
           {loader: 'postcss-loader'}
-        ],
+        ]
       })
     }, {
       // ASSET LOADER
@@ -125,7 +124,7 @@ module.exports = function makeWebpackConfig() {
       test: /\.html$/,
       loader: 'raw-loader'
     }]
-  };
+  }
 
   // ISTANBUL LOADER
   // https://github.com/deepsweet/istanbul-instrumenter-loader
@@ -168,7 +167,7 @@ module.exports = function makeWebpackConfig() {
         }
       }
     })
-  ];
+  ]
 
   // Skip rendering index.html in test mode
   if (!isTest) {
@@ -205,7 +204,7 @@ module.exports = function makeWebpackConfig() {
       // Copy assets from the public folder
       // Reference: https://github.com/kevlened/copy-webpack-plugin
       new CopyWebpackPlugin([{
-        from: __dirname + '/src/public'
+        from: path.resolve(__dirname, 'src/public')
       }])
     )
   }
@@ -218,7 +217,7 @@ module.exports = function makeWebpackConfig() {
   config.devServer = {
     contentBase: './src/public',
     stats: 'minimal'
-  };
+  }
 
-  return config;
-}();
+  return config
+}())

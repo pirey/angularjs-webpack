@@ -51,5 +51,5 @@ module.exports = function karmaConfig (config) {
     webpackMiddleware: {
       noInfo: 'errors-only'
     }
-  });
-};
+  })
+}

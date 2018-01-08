@@ -51,5 +51,17 @@
     "style-loader": "^0.13.0",
     "webpack": "2.2.0",
     "webpack-dev-server": "2.2.0"
+  },
+  "standard": {
+    "global": [
+      "angular",
+      "describe",
+      "it",
+      "expect",
+      "beforeEach",
+      "before",
+      "after",
+      "afterEach"
+    ]
   }
 }
